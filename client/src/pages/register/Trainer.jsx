@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { AiOutlineUser, AiOutlinePhone } from 'react-icons/ai';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AiOutlinePhone } from 'react-icons/ai';
 import { GrAdd } from 'react-icons/gr';
 import { FaTrashAlt, FaBirthdayCake } from 'react-icons/fa';
 import { LiaTimesSolid } from 'react-icons/lia';
@@ -8,11 +8,10 @@ import { Circles } from 'react-loader-spinner';
 import axios from 'axios';
 import Gym from '../../assets/gym1.jpg';
 
-const TrainerProfile = ({ setTrainer, setLogin, token }) => {
+const TrainerProfile = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    picture: null,
     weight: '',
     height: '',
     age: '',
@@ -22,22 +21,7 @@ const TrainerProfile = ({ setTrainer, setLogin, token }) => {
   });
 
   const [approaches, setApproaches] = useState(['']); // Initialize with one approach input
-  const [spin, setSpin] = useState(false); // For the loading spinner
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  const url = import.meta.env.VITE_BACKEND_URL;
-
-  const handlePictureChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({
-        ...formData,
-        picture: file, // Store the image data
-      });
-    }
-  };
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -93,9 +77,7 @@ const TrainerProfile = ({ setTrainer, setLogin, token }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSpin(true);
     const requestData = {
-      picture: formData.picture,
       age: formData.age,
       bio: formData.bio,
       specializations: formData.specializations.join(', '),
@@ -105,16 +87,9 @@ const TrainerProfile = ({ setTrainer, setLogin, token }) => {
     console.log(requestData);
   
     try {
-      const response = await axios.post(`${url}/api/trainer/create_profile`, requestData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': token,
-        },
-      });
+      
   
       console.log(response.data);
-      setSuccessMessage(response.data.message);
-      setLogin(true);
       setFormData({
         picture: null,
         age: '',
@@ -146,19 +121,6 @@ const TrainerProfile = ({ setTrainer, setLogin, token }) => {
             {/* Your form */}
             <h1 className='text-center text-2xl font-bold m-5'>Create your Trainer&apos;s profile</h1>
             <form onSubmit={handleSubmit}>
-              {/* Other inputs */}
-              <div className="relative mb-4">
-                <label htmlFor="picture">Profile picture</label>
-                <AiOutlineUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  className="pl-10 p-3 w-full rounded-md text-black border-2 border-primary"
-                  type="file"
-                  accept="image/*" // Accept only image files
-                  name="picture"
-                  required
-                  onChange={handlePictureChange}
-                />
-              </div>
               <div className="relative mb-4">
                 <label htmlFor="bio">Bio (Max 300 characters)</label>
                 <textarea

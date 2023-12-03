@@ -40,7 +40,7 @@ def login() -> str:
 @app_views.route('/register', methods=['POST'], strict_slashes=False)
 def user_register() -> str:
     """User registration"""
-    data = request.get_json()
+    data = request.form()
     name = data.get('name')
     email = data.get('email')
     gender = data.get('gender')
@@ -53,12 +53,17 @@ def user_register() -> str:
     if user:
         return make_response(jsonify({'error': 'User exists'}), 401)
     gender = gender.lower()
+    picture = request.files['picture']
+    if not picture:
+        abort(400, description="No picture provided")
+    picture_url = save_image(picture, user.id)
     kwargs = {
         'name': name,
         'email': email,
         'gender': gender,
         'phone': phone,
         'password': password,
+        'picture': picture_url
     }
     user = User(**kwargs)
     user.save()
@@ -104,7 +109,7 @@ def roles():
                  methods=['POST'], strict_slashes=False)
 def create_trainer() -> str:
     """trainer profile creation"""
-    data = request.form
+    data = request.get_json()
     if not data:
         return make_response(jsonify({'error': 'Not a json'}), 401)
     try:
@@ -114,13 +119,9 @@ def create_trainer() -> str:
     user = storage.get(User, id)
     if not user:
         abort(401, description="No user found")
-    picture = request.files['picture']
-    if not picture:
-        abort(400, description="No picture provided")
-    picture_url = save_image(picture, user.id)
+    
     kwargs = {
         'user_id': id,
-        'picture': picture_url,
         'bio': data.get('bio'),
         'approaches': data.get('approaches'),
         'specializations': data.get('specializations'),

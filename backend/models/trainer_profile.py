@@ -14,7 +14,6 @@ class TrainerProfile(BaseModel):
     __tablename__ = 'trainers'
     user_id = Column(String(255), ForeignKey('users.id'), nullable=False)
     age = Column(Float)
-    picture = Column(String(255))
     bio = Column(String(350))
     approaches = Column(String(350))
     specializations = Column(String(1000))

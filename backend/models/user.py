@@ -10,6 +10,7 @@ from hashlib import md5
 class User(BaseModel):
     """Representation of a user """
     __tablename__ = 'users'
+    picture = Column(String(255))
     email = Column(String(128), nullable=False, unique=True)
     password = Column(String(128), nullable=False)
     name = Column(String(128), nullable=True)

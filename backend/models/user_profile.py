@@ -23,7 +23,6 @@ class UserProfile(BaseModel):
     """User profile"""
     __tablename__ = 'user_profiles'
     age = Column(Float)
-    picture = Column(String(255))
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     weight = Column(Float)
     height = Column(Float)

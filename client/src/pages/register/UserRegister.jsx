@@ -3,52 +3,55 @@ import { useNavigate, Link } from 'react-router-dom';
 import Gym from '../../assets/gym1.jpg';
 import { HiOutlineMail, HiOutlineLockClosed } from 'react-icons/hi';
 import { AiOutlineUser, AiOutlinePhone } from 'react-icons/ai';
-import axios from 'axios';
-import { Circles } from 'react-loader-spinner';
-import PropTypes from 'prop-types';
+import { useGlobalContext } from '../../context/context';
+import { toast } from "react-hot-toast";
 
-const RegisterUser = ({ setLogin, setAuthToken, setUsername }) => {
+/**
+ * RegisterUser - usser signup page
+ * @returns nothing
+ */
+
+
+const RegisterUser = () => {
   const initialState = {
     name: '',
     email: '',
     gender: '',
     phone: '',
     password: '',
-    confPassword: ''
+    confPassword: '',
+    picture: null,
   }
-  const navigate = useNavigate()
+  const context = useGlobalContext();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [spin, setSpin] = useState(false);
-  const url = import.meta.env.VITE_BACKEND_URL
-
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSpin(true);
     if (formData.password === formData.confPassword) {
     formData.gender.toLowerCase()
-    await axios.post(`${url}/api/register`, formData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(response => {
-        console.log(response.data);
-        setSuccessMessage(response.data.message);
-        setLogin(true);
-        setAuthToken(response.data.token);
-        setUsername(response.data.name)
-        setFormData(initialState);
-        navigate('/register/role');
-      })
-      .catch(error => {
-        console.error('Error:', error.response.data);
-        setErrorMessage(error.response.data.error);
-      });
+    try {
+      toast.loading('Signing you up', {id: "signup"})
+      const res = await context?.signup(formData)
+      toast.success(`${res.message}`, {id: "signup"});
+      setFormData(initialState);
+      navigate('/register/role');
+    } catch (error) {
+      console.error("Error " + error);
+      toast.error(`${error}`, {id: 'signup'});
+    }
     } else {
-      setErrorMessage('Passwords do not match');
+       toast.error('Passwords do not match', {id: 'signup'});
+    }
+  };
+
+  const handlePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        picture: file, // Store the image data
+      });
     }
   };
 
@@ -69,12 +72,7 @@ const RegisterUser = ({ setLogin, setAuthToken, setUsername }) => {
           </div>
           <div className='md:w-1/2 border-2 border-primary rounded-md font-font2 p-4'>
             <div>
-            {successMessage && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-          <strong className="font-bold">Success!</strong>
-          <span className="block sm:inline">{successMessage}</span>
-        </div>
-      )}
+            
             </div>
             <h1 className='md:text-4xl sm:text-3xl text-2xl text-center font-bold py-2 font-font1 text-primary'>
               Registration
@@ -114,6 +112,18 @@ const RegisterUser = ({ setLogin, setAuthToken, setUsername }) => {
                 <AiOutlineUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               </div>
               <div className="relative mb-4">
+                <label htmlFor="picture">Profile picture</label>
+                <AiOutlineUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  className="pl-10 p-3 w-full rounded-md text-black border-2 border-primary"
+                  type="file"
+                  accept="image/*" // Accept only image files
+                  name="picture"
+                  required
+                  onChange={handlePictureChange}
+                />
+              </div>
+              <div className="relative mb-4">
                 <AiOutlinePhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   className="pl-10 p-3 w-full rounded-md text-black border-2 border-primary"
@@ -149,26 +159,16 @@ const RegisterUser = ({ setLogin, setAuthToken, setUsername }) => {
               <button
                 type="submit"
                 className="mt-2 p-3 w-full rounded-md bg-primary flex space-x-4 justify-center items-center text-white hover:bg-primary-dark"
-              >
-                <div>Register</div> <div>{spin && <Circles height={12} width={12} color='white'/>}</div>
-              </button>
+              >Register</button>
               <p className='mt-3'>Already have an account? <Link to={'/login'} className=' text-primary underline'>Login</Link></p>
             </form>
-            {errorMessage && (
-              <p className="text-red-500 mt-2">{errorMessage}</p>
-            )}
+           
           </div>
           
         </div>
       </div>
     </>
   );
-};
-
-RegisterUser.propTypes = {
-  setLogin: PropTypes.func.isRequired,
-  setAuthToken: PropTypes.func.isRequired,
-  setUsername: PropTypes.func.isRequired,
 };
 
 export default RegisterUser;
