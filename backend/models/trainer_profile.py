@@ -4,16 +4,13 @@
 
 from models.base import BaseModel
 from sqlalchemy import Column, String, Float, ForeignKey
-from sqlalchemy.orm import relationship, column_property
-from sqlalchemy.ext.hybrid import hybrid_property
-from .user import User
+from sqlalchemy.orm import relationship
 
 
 class TrainerProfile(BaseModel):
     """Representation of a user """
     __tablename__ = 'trainers'
     user_id = Column(String(255), ForeignKey('users.id'), nullable=False)
-    age = Column(Float)
     bio = Column(String(350))
     approaches = Column(String(350))
     specializations = Column(String(1000))

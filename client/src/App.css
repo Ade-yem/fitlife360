@@ -9,3 +9,11 @@
   display: grid;
   grid-template-columns: [trainer] 100px [or] 10px [trainee] 100px [end];
 }
+
+.page {
+  scrollbar-width: none;
+  -ms-overflow-style: none
+}
+.page::-webkit-scrollbar {
+  display: none;
+}

@@ -132,6 +132,7 @@ const Schedule = ({ token }) => {
       } )
       .catch(err => console.error(err));
   }
+  
   const handleSaveChanges = (id) => {
     axios.put(`${url}/api/class/${id}`, classData, {
       headers: {

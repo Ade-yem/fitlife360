@@ -4,7 +4,7 @@ from models import redis_storage, storage
 from models.user import User
 from models.user_profile import UserProfile
 from models.trainer_profile import TrainerProfile
-from typing import Dict, Tuple, Union, BinaryIO
+from typing import Dict, Union
 import os
 from os import getenv
 from uuid import uuid4
@@ -12,9 +12,6 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
 
-member_expiration = int(getenv('USER_EXPIRATION'))
-ins_expiration = int(getenv('INS_EXPIRATION'))
-admin_expiration = int(getenv('ADMIN_EXPIRATION'))
 upload_folder = getenv('UPLOAD_PATH')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -22,30 +19,7 @@ def generate_token() -> str:
     """generate uuid token"""
     return str(uuid4())
 
-def set_redis_key(user: User, token: str) -> Tuple[str, int]:
-    """set user token expiration"""
-    if user.role == 'trainer':
-        key = f'trainer_{token}'
-        expiration = member_expiration
-    elif user.role == 'member':
-        key = f'member_{token}'
-        expiration = ins_expiration
-    else:
-        key = f'admin_{token}'
-        expiration = admin_expiration
-    return key, expiration
 
-def get_id_by_token() -> str:
-    """get id from header token
-    Return: id of the trainer or user
-    """
-    token = request.headers.get('Authorization')
-    if not token:
-        abort(401, description='Missing token')
-    id = redis_storage.get(token)
-    if not id:
-        raise KeyError('Key could not be found')
-    return id
 
 # save image to the server
 def save_image(file: FileStorage, user_id: Union[str, int]) -> str:
@@ -100,7 +74,7 @@ def get_user_with_pic(cls: Union[User, UserProfile, TrainerProfile],
     """Get a user with their picture
     
     Args:
-        cls (User | UserProfile | TrainerProfile): The Pydantic model
+        cls (User): The Pydantic model
         class for the user
         id (str): The ID of the user
     
@@ -124,13 +98,6 @@ def get_user_with_pic(cls: Union[User, UserProfile, TrainerProfile],
         pass
     user_dict = user.to_dict()
     user_dict['picture'] = file_base64
-    all_users = storage.all(User).values()
-    for v in all_users:
-        if v.id == user_dict.get('user_id'):
-            user_dict['email'] = v.email
-            user_dict['name'] = v.name
-            user_dict['gender'] = v.gender
-            user_dict['phone'] = v.phone
     return user_dict
         
 

@@ -15,7 +15,7 @@ def validate_trainer(class_id):
     """checks if a trainer owns a class"""
     token = request.headers.get('Authorization')
     if token.split('_')[0] not in ['trainer', 'admin']:
-        make_response(jsonify({'error': "You are not authorized to take this action"}), 401)
+        make_response(jsonify({'error': "You are not authorized to take this action"}), 403)
     try:
         id = get_id_by_token()
     except KeyError as e:
@@ -74,8 +74,6 @@ def delete_class(class_id):
     storage.delete(classes)
     storage.save()
     return make_response(jsonify({}), 200)
-
-
 
 
 @app_views.route('/class', methods=['POST'], strict_slashes=False)

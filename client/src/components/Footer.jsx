@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   FaDribbbleSquare,
   FaFacebookSquare,
@@ -29,11 +28,11 @@ const Footer = () => {
                 <Link to="/services" className='mx-4'>Services</Link>
               </div>
               <div className='flex justify-around md:w-[60%] my-6'>
-                <FaFacebookSquare size={25} />
-                <FaInstagram size={25} />
-                <FaTwitterSquare size={25} />
-                <FaGithubSquare size={25} />
-                <FaDribbbleSquare size={25} />
+                <Link to={'#'}><FaFacebookSquare size={25} /></Link>
+                <Link to={'#'}><FaInstagram size={25} /></Link>
+                <Link to={'#'}><FaTwitterSquare size={25} /></Link>
+                <Link to={'#'}><FaGithubSquare size={25} /></Link>
+                <Link to={'#'}><FaDribbbleSquare size={25} /></Link>
               </div>
             </div>
             <div className='my-4'>
@@ -59,7 +58,7 @@ const Footer = () => {
           </div>
           <div className=' border-b border-slate-400'></div>
           <div>
-            <p className='float-right text-xs'>&copy; FitLife360 2023. All rights reserved</p>
+            <p className='float-right text-xs'>&copy; FitLife360 2024. All rights reserved</p>
           </div>
         </div>
     </div>

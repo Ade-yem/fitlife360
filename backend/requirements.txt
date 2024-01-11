@@ -8,6 +8,7 @@ Flask-Cors
 greenlet
 gunicorn
 itsdangerous
+jwt
 Jinja2
 Mako
 MarkupSafe

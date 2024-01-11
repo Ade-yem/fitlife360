@@ -2,9 +2,9 @@
 """ User model"""
 
 from models.base import BaseModel
-from sqlalchemy import CheckConstraint, Column, String
+from sqlalchemy import CheckConstraint, Column, Integer, String
 from sqlalchemy.orm import relationship
-from hashlib import md5
+from bcrypt import hashpw, gensalt
 
 
 class User(BaseModel):
@@ -17,7 +17,7 @@ class User(BaseModel):
     phone = Column(String(20))
     gender = Column(String(60), CheckConstraint(
         "gender IN ('male', 'female')"), nullable=False)
-    
+    age = Column(Integer)
     role = Column(String(50), CheckConstraint(
         "role IN ('member', 'trainer', 'admin' )"))
     user_profile = relationship('UserProfile', backref='user', uselist=False)
@@ -29,7 +29,7 @@ class User(BaseModel):
         super().__init__(*args, **kwargs)
 
     def __setattr__(self, name, value):
-        """sets a password with md5 encryption"""
+        """sets a password with bcrypt encryption"""
         if name == "password":
-            value = md5(value.encode()).hexdigest()
+            value = hashpw(value.encode('utf-8'), gensalt())
         super().__setattr__(name, value)

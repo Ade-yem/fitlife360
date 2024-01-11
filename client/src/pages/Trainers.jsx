@@ -3,21 +3,15 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
-import PropTypes from 'prop-types';
 
-const url = import.meta.env.VITE_BACKEND_URL;
-
-const Trainers = ({login, token, username}) => {
+const Trainers = () => {
     const [trainers, setTrainers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTrainer, setSelectedTrainer] = useState(null);
 
     useEffect(() => {
         axios
-            .get(`${url}/api/trainers`, {
-                headers: {
-                    Authorization: token,
-                },
+            .get(`/trainers`, {
             })
             .then((res) => {
                 console.log(res.data);
@@ -27,7 +21,7 @@ const Trainers = ({login, token, username}) => {
             .catch((err) => {
                 console.log(err);
             });
-    }, [token]);
+    }, []);
 
     const base64ToBinary = (base64Data) => {
         const binaryString = window.atob(base64Data);
@@ -42,14 +36,14 @@ const Trainers = ({login, token, username}) => {
 
     return ( 
         <>
-            <Navbar login={login} username={username} token={token} />
+            <Navbar />
             <main className="container mx-auto px-4">
             <div className="text-center lg:w-10/12 w-full m-auto pt-10">
          <h1 className="my-4 text-5xl font-bold font-font1 leading-tight text-secondary">
         Meet Our Trainers
          </h1>
          <p className="text-2xl mb-8 font-font2 text-gray-600">
-         At FitLife360, we believe that achieving your fitness goals is not only about hard work but also about having the right guidance and motivation. That's why we're proud to introduce you to our exceptional team of fitness trainers who are here to support you on your fitness journey.</p>
+         At FitLife360, we believe that achieving your fitness goals is not only about hard work but also about having the right guidance and motivation. That&rsquo;s why we&rsquo;re proud to introduce you to our exceptional team of fitness trainers who are here to support you on your fitness journey.</p>
          </div>
                 <div className="my-8">
                     
@@ -150,11 +144,5 @@ const Trainers = ({login, token, username}) => {
         </>
     );
 }
-
-Trainers.propTypes = {
-    login: PropTypes.bool.isRequired,
-    token: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired
-};
 
 export default Trainers;

@@ -5,7 +5,6 @@ import { GrAdd } from 'react-icons/gr';
 import { FaTrashAlt, FaBirthdayCake } from 'react-icons/fa';
 import { LiaTimesSolid } from 'react-icons/lia';
 import { Circles } from 'react-loader-spinner';
-import axios from 'axios';
 import Gym from '../../assets/gym1.jpg';
 
 const TrainerProfile = () => {

@@ -1,32 +1,27 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import { FaArrowLeft, FaUser, FaEnvelope, FaSignOutAlt, FaCalendar, FaUsers } from 'react-icons/fa';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from '../assets/logo.png';
-import axios from 'axios';
+import { useGlobalContext } from '../context/context';
+import toast from 'react-hot-toast';
 
-const Sidebar = ({ token, setLogin, setToken }) => {
+
+const Sidebar = () => {
   const [open, setOpen] = useState(true);
-  const navigate = useNavigate();
-  const url = import.meta.env.VITE_BACKEND_URL
+  const context = useGlobalContext();
+  
   const handleLogout = async () => {
-    // handle logout
-    await axios.post(`${url}/api/logout`, null, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      }
-    })
-      .then(response => {
-        console.log(response.data);
-        localStorage.clear();
-        setLogin(false);
-        setToken('');
-        navigate('/', {replace: true});
-      })
-      .catch(error => {
-        console.error('Error:', error.response.data);
-      });
+    try {
+      toast.loading('Logging out', {id: 'logout'})
+      await context.logout()
+      toast.success('Logout successfull', {id: 'logout'})
+    } catch (error) {
+      console.log(error)
+      toast.loading('unable to logout', {id: 'logout'})
+    }
   }
+
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 850) {
@@ -52,7 +47,7 @@ const Sidebar = ({ token, setLogin, setToken }) => {
       <Link to={'/'}>
       <img src={Logo} className={`transition-all duration-300 ${open ? 'w-50' : 'w-10 h-9'} h-20 m-auto mt-5`} alt="Logo" />
       </Link>
-      <Link to="/trainer/profile">
+      <Link to="/trainer">
         <div className={`flex gap-x-4 mt-5 items-center font-font2 px-2 py-2 cursor-pointer duration-500 hover:bg-secondary rounded-md `}>
           <div><FaUser size={15} className="text-white" /></div>
           <h1 className={`text-white origin-left text-lg ${!open && "scale-0"} duration-300`}>Profile</h1>

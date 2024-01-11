@@ -1,15 +1,12 @@
-venv/
-.env
+# Byte-compiled / optimized / DLL files
 __pycache__/
-views/__pycache__/
-models/__pycache__/
-.vscode/
-redis-7.2.1.tar.gz
-redis-7.2.1/
-alembic/
-dump.rdb
-.vscode
-~/profile_pics/
-a.db
-alembic.ini
-test
+*.py[cod]
+*$py.class
+
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Environments
+.env

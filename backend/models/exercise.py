@@ -13,4 +13,3 @@ class Exercise(BaseModel):
         String(255),
         ForeignKey('workout_plans.id'),
         nullable=False)
-    in_workout = relationship('WorkoutPlan', backref='in_wok_exerx', viewonly=True)

@@ -11,7 +11,6 @@ import RegisterUser from './pages/register/UserRegister';
 import TrainerProfile from './pages/register/Trainer';
 import MemberProfile from './pages/register/Member';
 // trainer profile
-import WelcomeTrainer from './pages/trainer/Welcome';
 import Profile from './pages/trainer/Profile';
 import Message from './pages/trainer/Message';
 import Schedule from './pages/trainer/Schedule';
@@ -20,13 +19,13 @@ import Layout from "./layout/TrainerLayout";
 // member profile
 import MemberLayout from './layout/MemberLayout';
 import Dashboard from './pages/member/Dashboard';
-import WelcomeMember from './pages/member/Welcome';
 import MemberMessages from './pages/member/Messages';
 import MemberClasses from './pages/member/Classes';
 import Progress from './pages/member/Progress';
 import MemberWorkouts from './pages/member/Workout';
 import Trainers from './pages/Trainers';
 import { useGlobalContext } from './context/context';
+import Workouts from './pages/Workouts';
 
 /**
  * App - the App
@@ -43,6 +42,8 @@ function App() {
         <Route path="/classes" element={<Classes />} />
         <Route path="/trainers" element={<Trainers />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/workouts" element={<Workouts />} />
+
         
         <Route path="/register" element={<RegisterLayout />} >
           <Route index element={<RegisterUser />} />
@@ -54,18 +55,16 @@ function App() {
 
         {context?.isLoggedIn &&(
           <Route path="/trainer" element={<Layout />}>
-            <Route index element={<WelcomeTrainer />} />
-            <Route path="profile" element={<Profile />} />
+            <Route index element={<Profile />} />
             <Route path="messages" element={<Message />} />
             <Route path="schedule" element={<Schedule />} />
             <Route path="clients" element={<Clients />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         )}
-        {context?.isLoggedIn &&(
+        {!context?.isLoggedIn &&(
           <Route path="/member" element={<MemberLayout />} >
-            <Route index element={<WelcomeMember />} />
-            <Route path="profile" element={<Dashboard />} />
+            <Route index element={<Dashboard />} />
             <Route path="messages" element={<MemberMessages />} />
             <Route path="workouts" element={<MemberWorkouts />} />
             <Route path="classes" element={<MemberClasses />} />

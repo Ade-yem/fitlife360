@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 export const loginUser = async (data) => {
   const res = await axios.post(`/api/login`, data)
   if (res.status !== 200) {

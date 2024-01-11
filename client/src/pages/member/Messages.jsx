@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaEnvelope, FaClock } from 'react-icons/fa';
 
-const MemberMessages = ({ token }) => {
-    const messages = [
+const MemberMessages = () => {
+    const message = [
         {
           sender: 'Big Tammy',
           message: 'Hi, I have a question about my workout routine.',
@@ -19,6 +19,8 @@ const MemberMessages = ({ token }) => {
           timestamp: '5 days ago',
         },
       ];
+    const [messages, setMessages] = useState(message)
+    
     
       return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ColorRing } from 'react-loader-spinner'; // Import the loader component
+ // Import the loader component
 import '../trainer/WelcomeTrainer.css'; // Import CSS for transitions
 
 const WelcomeMember = ({ username }) => {
@@ -26,11 +26,7 @@ const WelcomeMember = ({ username }) => {
       {visible ? (
         <div className='flex flex-col justify-center items-center space-y-10'>
           <h1 className="font-bold text-3xl transition duration-200">Welcome {username}</h1>
-          <ColorRing
-            color="#416982" // Loader color
-            height={80} // Loader height
-            width={80} // Loader width
-          />
+          
         </div>
       ) : (
         <h1 className="font-bold font-font1 text-3xl">Welcome {username}</h1>

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 const url = import.meta.env.VITE_BACKEND_URL;
 
-const MemberClasses = ({ token }) => {
+const MemberClasses = () => {
   const [classes, setClasses] = useState([]);
   const [modal, setModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
@@ -171,10 +171,6 @@ const MemberClasses = ({ token }) => {
           </div>
         </div>
      );
-}
-
-MemberClasses.propTypes = {
-  token: PropTypes.string.isRequired
 }
 
 export default MemberClasses;
